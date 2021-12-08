@@ -1,0 +1,109 @@
+:root{
+    --color-neutral: #69626D;
+    --color-main-light: #CBBEB3;
+    --color-main-dark: #BCAF9C;
+    --color-contrast-light: #E88EED;
+    --color-contrast-dark: #002500;
+}
+html{
+    height: 100%;
+    margin: 0;
+    color: var(--color-contrast-dark);
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+body{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-image: linear-gradient(50deg, var(--color-neutral) 50%, var(--color-main-light) 100%);
+}
+header{
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 1%;
+    border-bottom: 1px solid var(--color-contrast-dark);
+}
+nav{
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 0.5%;
+}
+h2{
+    font-size: large;
+    font-weight: bold;
+    padding-bottom: 5%;
+}
+em{
+    font-weight: bolder;
+}
+
+.navigation{
+    padding: 5%;
+    border: 1px solid transparent;
+    border-radius: 15px;
+}
+.navigation:hover{
+    border: 1px solid var(--color-contrast-dark);
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.05);
+}
+.content-container{
+    display: flex;
+    flex-direction: row;
+    height: 80%;
+}
+.text{
+    padding: 5%;
+}
+
+#sidebar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 20%;
+    height: 100%;
+    margin: 1%;
+    border-right: 1px solid var(--color-contrast-dark);
+}
+#github-slider{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    width: 100%;
+    height: 32px;
+    border: 2px solid var(--color-contrast-dark);
+    border-radius: 20px;
+    background-color: var(--color-contrast-dark);
+    text-decoration: none;
+}
+#github-text{
+    color: #fff;
+    margin: auto;
+    padding: 0 15px;
+}
+#github-logo{
+    transition: all 0.5s ease-in-out;
+}
+
+#active-content{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+}
+#title{
+    font-size: x-large;
+    padding: 10px;
+    margin: 5px auto;
+}
+button{
+    font-weight: bold;
+    color: var(--color-contrast-dark);
+    background: var(--color-main-light);
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin: 5px auto;
+}
