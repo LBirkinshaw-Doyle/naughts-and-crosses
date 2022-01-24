@@ -110,11 +110,16 @@ button{
 #game-area{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    width: 80%;
 }
 
 .player{
+    flex-grow: 0;
     margin: 1rem;
     padding: 0.5rem;
+    height: fit-content;
+
     border: 0.15rem solid var(--color-contrast-dark);
     border-radius: 0.5rem;
     text-align: center;
@@ -129,11 +134,47 @@ select{
     outline: 0;
     padding: 0.65em 2.5em 0.55em 0.75em;
 }
-select:active{
-    color: var(--color-contrast-light);
-    background-color: var(--color-neutral);
-}
 select:hover{
     color: var(--color-contrast-light);
     background-color: var(--color-neutral);
+}
+
+#game-board{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    
+    margin: 0.5rem;
+    min-width: 10rem;
+    min-height: 10rem;
+    height: auto;
+    flex: 1 0 auto;
+
+    border: 0.15rem solid var(--color-contrast-dark);
+    border-radius: 0.5rem;
+}
+
+.board{
+    flex: initial;
+    width: 32.6%;
+    height: 32.7%;
+}
+.board::before{
+    content: "";
+    float: left;
+    padding-top: 100%;
+}
+.board:hover{
+    background-color: rgba(0, 0, 0, 0.25);
+}
+.divider{
+    background-color: var(--color-contrast-dark);
+}
+.vert{
+    width: 1%;
+    height: 32.7%;
+}
+.horz{
+    width: 100%;
+    height: 1%;
 }
