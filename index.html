@@ -23,7 +23,7 @@
                 <br>
             </div>
             <div id="github-link">
-                <a id="github-slider" href="https://github.com/LBirkinshaw-Doyle/Calculator">
+                <a id="github-slider" href="https://github.com/LBirkinshaw-Doyle/naughts-and-crosses">
                     <img id="github-logo" src="/media/GitHub32px.png">
                     <span id=github-text>Github Repo</span>
                 </a>
@@ -33,13 +33,25 @@
             <h1 id="title">Naughts and Crosses</h1>
             <div id="game-area">
                 <div id=player-one-containter class="player inactive">
-                    <span>P1</span>
-                    <div id="player-select"></div>                    
+                    <span>Player 1</span>
+                    <div id="player-select" class="custom-select">
+                        <select id="player-one-choice">
+                            <option value="0">Select Token:</option>
+                            <option value="1">X</option>
+                            <option value="2">O</option>
+                        </select>
+                    </div>                    
                 </div>
                 <div id=game-board class="board-container"></div>
                 <div id=player-two-containter class="player inactive">
-                    <span>P2</span>
-                    <div id="player-select"></div>   
+                    <span>Player 2</span>
+                    <div id="player-select" class="custom-select">
+                        <select id="player-two-choice">
+                            <option value="0">Select Token:</option>
+                            <option value="1">X</option>
+                            <option value="2">O</option>
+                        </select>
+                    </div>   
                 </div>
             </div>
         </div>

@@ -107,3 +107,33 @@ button{
     border-radius: 15px;
     margin: 5px auto;
 }
+#game-area{
+    display: flex;
+    flex-direction: row;
+}
+
+.player{
+    margin: 1rem;
+    padding: 0.5rem;
+    border: 0.15rem solid var(--color-contrast-dark);
+    border-radius: 0.5rem;
+    text-align: center;
+}
+select{
+    margin: 0.5rem;
+    color: var(--color-contrast-dark);
+    background-color: var(--color-main-light);
+    border: 0.1rem solid var(--color-contrast-dark);
+    border-radius: 0.5rem;
+    line-height: 1;
+    outline: 0;
+    padding: 0.65em 2.5em 0.55em 0.75em;
+}
+select:active{
+    color: var(--color-contrast-light);
+    background-color: var(--color-neutral);
+}
+select:hover{
+    color: var(--color-contrast-light);
+    background-color: var(--color-neutral);
+}
