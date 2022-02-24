@@ -64,3 +64,17 @@ const Player = () => {
 
     return {getToken, setToken, getWins, incrementWins};
 }
+
+const DOM = (() => {
+
+    
+    const elements = {}
+
+    return {
+        highlight,
+        lowlight,
+        displayGameState,
+        displayWinner,
+        elements
+    }
+})();
