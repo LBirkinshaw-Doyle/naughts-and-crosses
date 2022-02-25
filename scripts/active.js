@@ -68,7 +68,22 @@ const Player = () => {
 const DOM = (() => {
 
     
-    const elements = {}
+    const elements = {
+        p1Container: document.getElementById('player-one-container'),
+        p1Selection: document.getElementById('player-one-choice'),
+        p2Container: document.getElementById('player-two-container'),
+        p2Selection: document.getElementById('player-two-choice'),
+        gameBoard: document.getElementById('game-board'),
+        topLeftSquare: document.getElementById('top-left'),
+        topCenterSquare: document.getElementById('top-center'),
+        topRightSquare: document.getElementById('top-right'),
+        middleLeftSquare: document.getElementById('middle-left'),
+        middleCenterSquare: document.getElementById('middle-center'),
+        middleRightSquare: document.getElementById('middle-right'),
+        bottomLeftSquare: document.getElementById('bottom-left'),
+        bottomCenterSquare: document.getElementById('bottom-center'),
+        bottomRightSquare: document.getElementById('bottom-right'),
+    }
 
     return {
         highlight,
