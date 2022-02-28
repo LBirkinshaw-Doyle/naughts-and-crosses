@@ -74,6 +74,9 @@ const DOM = (() => {
     const lowlight = function(element) {
         element.classList.remove('highlight');
     }
+    const addText = function(textString) {
+        elements.title.textContent = textString;
+    }
     
     const elements = {
         p1Container: document.getElementById('player-one-container'),
@@ -90,11 +93,13 @@ const DOM = (() => {
         bottomLeftSquare: document.getElementById('bottom-left'),
         bottomCenterSquare: document.getElementById('bottom-center'),
         bottomRightSquare: document.getElementById('bottom-right'),
+        title: document.getElementById('title'),
     }
 
     return {
         highlight,
         lowlight,
+        addText,
         //displayGameState,
         //displayWinner,
         elements
