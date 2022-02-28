@@ -77,6 +77,10 @@ const DOM = (() => {
     const addText = function(textString) {
         elements.title.textContent = textString;
     }
+    const displayGameState = function() {
+        let boardState = GameBoard.gameState().flat();
+        if (boardState[0] === 1) {elements.topLeftSquare.textContent = "X"} else if (boardState[0] === -1){elements.topLeftSquare.textContent = "O"}
+    }
     
     const elements = {
         p1Container: document.getElementById('player-one-container'),
@@ -100,7 +104,7 @@ const DOM = (() => {
         highlight,
         lowlight,
         addText,
-        //displayGameState,
+        displayGameState,
         //displayWinner,
         elements
     }
