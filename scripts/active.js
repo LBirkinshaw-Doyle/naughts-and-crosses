@@ -67,6 +67,13 @@ const Player = () => {
 
 const DOM = (() => {
 
+    const highlight =  function(element) {
+        element.classList.remove("inactive");
+        element.classList.add("highlight");
+    }
+    const lowlight = function(element) {
+        element.classList.remove('highlight');
+    }
     
     const elements = {
         p1Container: document.getElementById('player-one-container'),
@@ -88,8 +95,8 @@ const DOM = (() => {
     return {
         highlight,
         lowlight,
-        displayGameState,
-        displayWinner,
+        //displayGameState,
+        //displayWinner,
         elements
     }
 })();
