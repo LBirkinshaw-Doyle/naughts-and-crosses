@@ -80,8 +80,22 @@ const DOM = (() => {
     const displayGameState = function() {
         let boardState = GameBoard.gameState().flat();
         if (boardState[0] === 1) {elements.topLeftSquare.textContent = "X"} else if (boardState[0] === -1){elements.topLeftSquare.textContent = "O"}
+        if (boardState[1] === 1) {elements.topCenterSquare.textContent = "X"} else if (boardState[1] === -1){elements.topCenterSquare.textContent = "O"}
+        if (boardState[2] === 1) {elements.topRightSquare.textContent = "X"} else if (boardState[2] === -1){elements.topRightSquare.textContent = "O"}
+        if (boardState[3] === 1) {elements.middleLeftSquare.textContent = "X"} else if (boardState[3] === -1){elements.middleLeftSquare.textContent = "O"}
+        if (boardState[4] === 1) {elements.middleCenterSquare.textContent = "X"} else if (boardState[4] === -1){elements.middleCenterSquare.textContent = "O"}
+        if (boardState[5] === 1) {elements.middleRightSquare.textContent = "X"} else if (boardState[5] === -1){elements.middleRightSquare.textContent = "O"}
+        if (boardState[6] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[6] === -1){elements.bottomLeftSquare.textContent = "O"}
+        if (boardState[7] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[7] === -1){elements.bottomCenterSquare.textContent = "O"}
+        if (boardState[8] === 1) {elements.bottomRightSquare.textContent = "X"} else if (boardState[8] === -1){elements.bottomRightSquare.textContent = "O"}
     }
-    
+    const displayWinner = function(winningPlayer) {
+        let winningToken;
+        (winningPlayer.getToken() === -1) ? winningToken = O : winningToken = X;
+
+        let winMessage = winningToken + " wins!";
+        addText(winMessage);
+    }
     const elements = {
         p1Container: document.getElementById('player-one-container'),
         p1Selection: document.getElementById('player-one-choice'),
@@ -105,7 +119,7 @@ const DOM = (() => {
         lowlight,
         addText,
         displayGameState,
-        //displayWinner,
+        displayWinner,
         elements
     }
 })();
