@@ -128,3 +128,62 @@ const DOM = (() => {
         elements
     }
 })();
+
+const GameEngine = (() => {
+    let p1Choice, p2Choice;
+    DOM.elements.p1Selection.addEventListener('click', e => {
+        p1Choice = e.target.textContent;
+        GameBoard.clearBoard;
+        DOM.displayGameState;
+        initialize();
+    });
+    DOM.elements.p2Selection.addEventListener('click', e => {
+        p2Choice= e.target.textContent;
+        GameBoard.clearBoard;
+        DOM.displayGameState;
+        initialize();
+    });
+
+    const initialize = function () {
+        if (!(p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
+            if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")};
+            if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")};
+            DOM.elements.p1Container.classList.remove("inactive");
+            DOM.elements.p1Container.classList.add("highlight");
+            DOM.addText('Choose Player One');
+        }
+        if (!(p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+            if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")}
+            DOM.elements.p1Container.classList.remove("inactive");
+            DOM.elements.p1Container.classList.add("highlight");
+            DOM.addText('Choose Player One');
+        }
+        if ((p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
+            if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")}
+            DOM.elements.p2Container.classList.replace("inactive", "highlight");
+            DOM.addText('Choose Player Two');
+        }
+        if ((p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+            if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")};
+            if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")};
+            DOM.elements.gameBoard.classList.remove('inactive');
+            DOM.elements.gameBoard.classList.add('highlight');
+            DOM.addText('Play Naughts & Crosses');
+            playerOne = Player();
+            playerTwo = Player();
+            (p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
+            (p2Choice === 'X') ? playerTwo.setToken(1) : playerTwo.setToken(-1);
+            playRound();
+        }
+    }
+
+    const playRound = function () {
+        
+    }
+
+
+    return {initialize}
+})();
+
+let playerOne, playerTwo;
+GameEngine.initialize();
