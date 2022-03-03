@@ -13,6 +13,10 @@ const GameBoard = (() => {
         _gameboardArray[row][column] = player.getToken();
     };
 
+    const clearBoard = () => {
+        _gameboardArray = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+    }
+
     const checkBoard = () => {
         let rowCheck=false;
         let columnCheck=false;
@@ -49,6 +53,7 @@ const GameBoard = (() => {
     return {
         makeMove,
         checkBoard,
+        clearBoard,
         gameState,
     };
 })();
