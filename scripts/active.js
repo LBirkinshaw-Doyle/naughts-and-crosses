@@ -21,29 +21,31 @@ const GameBoard = (() => {
         let rowCheck=false;
         let columnCheck=false;
         let diagCheck=false;
+        let winCheck;
         let winIndex;
         let winner;
         let transpose;
 
         _gameboardArray.forEach((e, index) => e.forEach((value, jndex) => transpose[jndex][index] = value));
         _gameboardArray.forEach((e, index) => {
-            if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === 3){rowCheck = true; winIndex = index; winner = 1;} 
-            else if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === -3){rowCheck = true; winIndex = index; winner = -1;}
+            if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === 3){rowCheck = true; winIndex = index;} 
+            else if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === -3){rowCheck = true; winIndex = index;}
         });
         transpose.forEach((e, index) => {
-            if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === 3){columnCheck = true; winIndex = index; winner = 1;} 
-            else if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === -3){columnCheck = true; winIndex = index; winner = -1;}            
+            if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === 3){columnCheck = true; winIndex = index;} 
+            else if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === -3){columnCheck = true; winIndex = index;}            
         });
         let diagSum = [
             _gameboardArray[0][0] + _gameboardArray[1][1] + _gameboardArray[2][2],
             _gameboardArray[2][0] + _gameboardArray[1][1] + _gameboardArray[0][2]
         ];
         diagSum.forEach((e, i) => {
-            if (e === 3) {diagCheck = true; winIndex = i; winner = 1;}
-            else if (e === -3) {diagCheck = true; winIndex = i; winner = -1;}
+            if (e === 3) {diagCheck = true; winIndex = i;}
+            else if (e === -3) {diagCheck = true; winIndex = i;}
         });
+        (rowCheck||columnCheck||diagCheck) ? winCheck=true : winCheck=false;
         
-        return [rowCheck, columnCheck, diagCheck, winIndex, winner];
+        return [winCheck, rowCheck, columnCheck, diagCheck, winIndex];
     };
         
     const gameState = () => {
@@ -130,7 +132,7 @@ const DOM = (() => {
 })();
 
 const GameEngine = (() => {
-    let p1Choice, p2Choice;
+    let p1Choice, p2Choice, currentPlayer, gameStarted;
     DOM.elements.p1Selection.addEventListener('click', e => {
         p1Choice = e.target.textContent;
         GameBoard.clearBoard;
@@ -143,42 +145,62 @@ const GameEngine = (() => {
         DOM.displayGameState;
         initialize();
     });
+    DOM.elements.topLeftSquare.addEventListener('click', () => {
+        if (gameStarted) playRound([0, 0]);
+    });
 
     const initialize = function () {
         if (!(p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
-            if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")};
-            if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")};
+            DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.p1Container.classList.remove("inactive");
             DOM.elements.p1Container.classList.add("highlight");
             DOM.addText('Choose Player One');
+            gameStarted = false;
         }
         if (!(p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
-            if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")}
+            DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.p1Container.classList.remove("inactive");
             DOM.elements.p1Container.classList.add("highlight");
             DOM.addText('Choose Player One');
+            gameStarted = false;
         }
         if ((p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
-            if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")}
-            DOM.elements.p2Container.classList.replace("inactive", "highlight");
+            DOM.elements.p1Container.classList.remove("highlight");
+            DOM.elements.p2Container.classList.remove("inactive");
+            DOM.elements.p2Container.classList.add("highlight");
             DOM.addText('Choose Player Two');
+            gameStarted = false;
         }
         if ((p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
             if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")};
             if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")};
             DOM.elements.gameBoard.classList.remove('inactive');
             DOM.elements.gameBoard.classList.add('highlight');
+            DOM.elements.p1Container.classList.add('highlight');
             DOM.addText('Play Naughts & Crosses');
             playerOne = Player();
             playerTwo = Player();
             (p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
             (p2Choice === 'X') ? playerTwo.setToken(1) : playerTwo.setToken(-1);
-            playRound();
+            gameStarted = true;
+
         }
     }
 
-    const playRound = function () {
-        
+    const playRound = function (location) {
+        if (gameStarted) {
+            currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
+            GameBoard.makeMove(currentPlayer, location);
+            DOM.displayGameState()
+            if (GameBoard.checkBoard()[0]) endGame();
+        }
+    }
+
+    const endGame = function () {
+        gameStarted = false;
+        currentPlayer === playerOne ? playerOne.incrementWins() : playerTwo.incrementWins();
+        DOM.displayWinner(currentPlayer);
+        GameBoard.clearBoard();
     }
 
 
