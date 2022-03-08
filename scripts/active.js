@@ -21,10 +21,10 @@ const GameBoard = (() => {
         let rowCheck=false;
         let columnCheck=false;
         let diagCheck=false;
+        let transpose=[[],[],[]];
         let winCheck;
         let winIndex;
-        let winner;
-        let transpose;
+        
 
         _gameboardArray.forEach((e, index) => e.forEach((value, jndex) => transpose[jndex][index] = value));
         _gameboardArray.forEach((e, index) => {
@@ -86,21 +86,32 @@ const DOM = (() => {
     }
     const displayGameState = function() {
         let boardState = GameBoard.gameState().flat();
-        if (boardState[0] === 1) {elements.topLeftSquare.textContent = "X"} else if (boardState[0] === -1){elements.topLeftSquare.textContent = "O"}
-        if (boardState[1] === 1) {elements.topCenterSquare.textContent = "X"} else if (boardState[1] === -1){elements.topCenterSquare.textContent = "O"}
+        if (boardState[0] === 1) {elements.topLeftSquare.textContent = "X"} 
+        else if (boardState[0] === -1){elements.topLeftSquare.textContent = "O"}
+        else {elements.topLeftSquare.textContent = ""}
+        if (boardState[1] === 1) {elements.topCenterSquare.textContent = "X"}
+        else if (boardState[1] === -1){elements.topCenterSquare.textContent = "O"}
+        else {elements.topCenterSquare.textContent = ""}
         if (boardState[2] === 1) {elements.topRightSquare.textContent = "X"} else if (boardState[2] === -1){elements.topRightSquare.textContent = "O"}
+        else {elements.topRightSquare.textContent = ""}
         if (boardState[3] === 1) {elements.middleLeftSquare.textContent = "X"} else if (boardState[3] === -1){elements.middleLeftSquare.textContent = "O"}
+        else {elements.middleLeftSquare.textContent = ""}
         if (boardState[4] === 1) {elements.middleCenterSquare.textContent = "X"} else if (boardState[4] === -1){elements.middleCenterSquare.textContent = "O"}
+        else {elements.middleCenterSquare.textContent = ""}
         if (boardState[5] === 1) {elements.middleRightSquare.textContent = "X"} else if (boardState[5] === -1){elements.middleRightSquare.textContent = "O"}
+        else {elements.middleRightSquare.textContent = ""}
         if (boardState[6] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[6] === -1){elements.bottomLeftSquare.textContent = "O"}
+        else {elements.bottomLeftSquare.textContent = ""}
         if (boardState[7] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[7] === -1){elements.bottomCenterSquare.textContent = "O"}
+        else {elements.bottomCenterSquare.textContent = ""}
         if (boardState[8] === 1) {elements.bottomRightSquare.textContent = "X"} else if (boardState[8] === -1){elements.bottomRightSquare.textContent = "O"}
+        else {elements.bottomRightSquare.textContent = ""}
     }
     const displayWinner = function(winningPlayer) {
         let winningToken;
-        (winningPlayer.getToken() === -1) ? winningToken = O : winningToken = X;
+        (winningPlayer.getToken() === -1) ? winningToken = "O" : winningToken = "X";
 
-        let winMessage = winningToken + " wins!";
+        let winMessage = winningToken + " wins! Click here to play again.";
         addText(winMessage);
     }
     const elements = {
@@ -132,7 +143,7 @@ const DOM = (() => {
 })();
 
 const GameEngine = (() => {
-    let p1Choice, p2Choice, currentPlayer, gameStarted;
+    let p1Choice, p2Choice, currentPlayer, gameStarted, gameEnded;
     DOM.elements.p1Selection.addEventListener('click', e => {
         p1Choice = e.target.textContent;
         GameBoard.clearBoard;
@@ -172,6 +183,13 @@ const GameEngine = (() => {
     DOM.elements.bottomRightSquare.addEventListener('click', () => {
         if (gameStarted) playRound([2, 2]);
     });
+    DOM.elements.title.addEventListener('click', () => {
+        if (gameEnded) {
+            currentPlayer = undefined;
+            gameEnded = false;
+            initialize();
+        };
+    })
 
     const initialize = function () {
         if (!(p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
@@ -196,8 +214,7 @@ const GameEngine = (() => {
             gameStarted = false;
         }
         if ((p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
-            if (DOM.elements.p1Container.classList.contains("highlight")) {DOM.elements.p1Container.classList.remove("highlight")};
-            if (DOM.elements.p2Container.classList.contains("highlight")) {DOM.elements.p2Container.classList.remove("highlight")};
+            DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.gameBoard.classList.remove('inactive');
             DOM.elements.gameBoard.classList.add('highlight');
             DOM.elements.p1Container.classList.add('highlight');
@@ -222,9 +239,11 @@ const GameEngine = (() => {
 
     const endGame = function () {
         gameStarted = false;
+        gameEnded = true;
         currentPlayer === playerOne ? playerOne.incrementWins() : playerTwo.incrementWins();
         DOM.displayWinner(currentPlayer);
         GameBoard.clearBoard();
+        DOM.displayGameState();
     }
 
 
