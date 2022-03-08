@@ -86,6 +86,7 @@ const DOM = (() => {
     }
     const displayGameState = function() {
         let boardState = GameBoard.gameState().flat();
+        console.log(boardState);
         if (boardState[0] === 1) {elements.topLeftSquare.textContent = "X"} 
         else if (boardState[0] === -1){elements.topLeftSquare.textContent = "O"}
         else {elements.topLeftSquare.textContent = ""}
@@ -102,7 +103,7 @@ const DOM = (() => {
         else {elements.middleRightSquare.textContent = ""}
         if (boardState[6] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[6] === -1){elements.bottomLeftSquare.textContent = "O"}
         else {elements.bottomLeftSquare.textContent = ""}
-        if (boardState[7] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[7] === -1){elements.bottomCenterSquare.textContent = "O"}
+        if (boardState[7] === 1) {elements.bottomCenterSquare.textContent = "X"} else if (boardState[7] === -1){elements.bottomCenterSquare.textContent = "O"}
         else {elements.bottomCenterSquare.textContent = ""}
         if (boardState[8] === 1) {elements.bottomRightSquare.textContent = "X"} else if (boardState[8] === -1){elements.bottomRightSquare.textContent = "O"}
         else {elements.bottomRightSquare.textContent = ""}
