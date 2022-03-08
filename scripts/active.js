@@ -158,31 +158,31 @@ const GameEngine = (() => {
         initialize();
     });
     DOM.elements.topLeftSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([0, 0]);
+        if (gameStarted && DOM.elements.topLeftSquare.textContent === "") playRound([0, 0]);
     });
     DOM.elements.topCenterSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([0, 1]);
+        if (gameStarted && DOM.elements.topCenterSquare.textContent === "") playRound([0, 1]);
     });
     DOM.elements.topRightSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([0, 2]);
+        if (gameStarted && DOM.elements.topRightSquare.textContent === "") playRound([0, 2]);
     });
     DOM.elements.middleLeftSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([1, 0]);
+        if (gameStarted && DOM.elements.middleLeftSquare.textContent === "") playRound([1, 0]);
     });
     DOM.elements.middleCenterSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([1, 1]);
+        if (gameStarted && DOM.elements.middleCenterSquare.textContent === "") playRound([1, 1]);
     });
     DOM.elements.middleRightSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([1, 2]);
+        if (gameStarted && DOM.elements.middleRightSquare.textContent === "") playRound([1, 2]);
     });
     DOM.elements.bottomLeftSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([2, 0]);
+        if (gameStarted && DOM.elements.bottomLeftSquare.textContent === "") playRound([2, 0]);
     });
     DOM.elements.bottomCenterSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([2, 1]);
+        if (gameStarted && DOM.elements.bottomCenterSquare.textContent === "") playRound([2, 1]);
     });
     DOM.elements.bottomRightSquare.addEventListener('click', () => {
-        if (gameStarted) playRound([2, 2]);
+        if (gameStarted && DOM.elements.bottomRightSquare.textContent === "") playRound([2, 2]);
     });
     DOM.elements.title.addEventListener('click', () => {
         if (gameEnded) {
