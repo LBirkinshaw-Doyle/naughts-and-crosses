@@ -155,6 +155,8 @@ select:hover{
     flex: initial;
     width: 32.6%;
     height: 32.7%;
+    text-align: center;
+    font-size: 10vw;
 }
 .board::before{
     content: "";

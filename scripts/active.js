@@ -214,10 +214,10 @@ const GameEngine = (() => {
             gameStarted = false;
         }
         if ((p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+            DOM.elements.p1Container.classList.remove('highlight');
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.gameBoard.classList.remove('inactive');
             DOM.elements.gameBoard.classList.add('highlight');
-            DOM.elements.p1Container.classList.add('highlight');
             DOM.addText('Play Naughts & Crosses');
             playerOne = Player();
             playerTwo = Player();
