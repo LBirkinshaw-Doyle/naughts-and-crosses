@@ -158,11 +158,14 @@ select:hover{
 }
 
 .board{
+    display: flex;
     flex: initial;
     width: 32.6%;
     height: 32.7%;
     text-align: center;
     font-size: 3rem;
+    justify-content: center;
+    align-items: center;
 }
 .board::before{
     content: "";

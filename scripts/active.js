@@ -87,26 +87,33 @@ const DOM = (() => {
     const displayGameState = function() {
         let boardState = GameBoard.gameState().flat();
         console.log(boardState);
-        if (boardState[0] === 1) {elements.topLeftSquare.textContent = "X"} 
-        else if (boardState[0] === -1){elements.topLeftSquare.textContent = "O"}
-        else {elements.topLeftSquare.textContent = ""}
-        if (boardState[1] === 1) {elements.topCenterSquare.textContent = "X"}
-        else if (boardState[1] === -1){elements.topCenterSquare.textContent = "O"}
-        else {elements.topCenterSquare.textContent = ""}
-        if (boardState[2] === 1) {elements.topRightSquare.textContent = "X"} else if (boardState[2] === -1){elements.topRightSquare.textContent = "O"}
-        else {elements.topRightSquare.textContent = ""}
-        if (boardState[3] === 1) {elements.middleLeftSquare.textContent = "X"} else if (boardState[3] === -1){elements.middleLeftSquare.textContent = "O"}
-        else {elements.middleLeftSquare.textContent = ""}
-        if (boardState[4] === 1) {elements.middleCenterSquare.textContent = "X"} else if (boardState[4] === -1){elements.middleCenterSquare.textContent = "O"}
-        else {elements.middleCenterSquare.textContent = ""}
-        if (boardState[5] === 1) {elements.middleRightSquare.textContent = "X"} else if (boardState[5] === -1){elements.middleRightSquare.textContent = "O"}
-        else {elements.middleRightSquare.textContent = ""}
-        if (boardState[6] === 1) {elements.bottomLeftSquare.textContent = "X"} else if (boardState[6] === -1){elements.bottomLeftSquare.textContent = "O"}
-        else {elements.bottomLeftSquare.textContent = ""}
-        if (boardState[7] === 1) {elements.bottomCenterSquare.textContent = "X"} else if (boardState[7] === -1){elements.bottomCenterSquare.textContent = "O"}
-        else {elements.bottomCenterSquare.textContent = ""}
-        if (boardState[8] === 1) {elements.bottomRightSquare.textContent = "X"} else if (boardState[8] === -1){elements.bottomRightSquare.textContent = "O"}
-        else {elements.bottomRightSquare.textContent = ""}
+        if (boardState[0] === 1) {elements.topLeftSquare.firstChild.textContent = "X"} 
+        else if (boardState[0] === -1){elements.topLeftSquare.firstChild.textContent = "O"}
+        else {elements.topLeftSquare.firstChild.textContent = ""}
+        if (boardState[1] === 1) {elements.topCenterSquare.firstChild.textContent = "X"}
+        else if (boardState[1] === -1){elements.topCenterSquare.firstChild.textContent = "O"}
+        else {elements.topCenterSquare.firstChild.textContent = ""}
+        if (boardState[2] === 1) {elements.topRightSquare.firstChild.textContent = "X"}
+        else if (boardState[2] === -1){elements.topRightSquare.firstChild.textContent = "O"}
+        else {elements.topRightSquare.firstChild.textContent = ""}
+        if (boardState[3] === 1) {elements.middleLeftSquare.firstChild.textContent = "X"}
+        else if (boardState[3] === -1){elements.middleLeftSquare.firstChild.textContent = "O"}
+        else {elements.middleLeftSquare.firstChild.textContent = ""}
+        if (boardState[4] === 1) {elements.middleCenterSquare.firstChild.textContent = "X"}
+        else if (boardState[4] === -1){elements.middleCenterSquare.firstChild.textContent = "O"}
+        else {elements.middleCenterSquare.firstChild.textContent = ""}
+        if (boardState[5] === 1) {elements.middleRightSquare.firstChild.textContent = "X"}
+        else if (boardState[5] === -1){elements.middleRightSquare.firstChild.textContent = "O"}
+        else {elements.middleRightSquare.firstChild.textContent = ""}
+        if (boardState[6] === 1) {elements.bottomLeftSquare.firstChild.textContent = "X"}
+        else if (boardState[6] === -1){elements.bottomLeftSquare.firstChild.textContent = "O"}
+        else {elements.bottomLeftSquare.firstChild.textContent = ""}
+        if (boardState[7] === 1) {elements.bottomCenterSquare.firstChild.textContent = "X"}
+        else if (boardState[7] === -1){elements.bottomCenterSquare.firstChild.textContent = "O"}
+        else {elements.bottomCenterSquare.firstChild.textContent = ""}
+        if (boardState[8] === 1) {elements.bottomRightSquare.firstChild.textContent = "X"}
+        else if (boardState[8] === -1){elements.bottomRightSquare.firstChild.textContent = "O"}
+        else {elements.bottomRightSquare.firstChild.textContent = ""}
     }
     const displayWinner = function(winningPlayer) {
         let winningToken;
