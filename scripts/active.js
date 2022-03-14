@@ -226,7 +226,7 @@ const GameEngine = (() => {
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.gameBoard.classList.remove('inactive');
             DOM.elements.gameBoard.classList.add('highlight');
-            DOM.addText('Play Naughts & Crosses');
+            DOM.addText('Player 1 to go!');
             playerOne = Player();
             playerTwo = Player();
             (p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
@@ -241,6 +241,7 @@ const GameEngine = (() => {
             currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
             GameBoard.makeMove(currentPlayer, location);
             DOM.displayGameState()
+            currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
             if (GameBoard.checkBoard()[0]) endGame();
         }
     }
