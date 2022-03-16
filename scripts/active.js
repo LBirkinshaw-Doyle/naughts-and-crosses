@@ -24,9 +24,10 @@ const GameBoard = (() => {
         let transpose=[[],[],[]];
         let winCheck;
         let winIndex;
+        let drawCheck;
         
 
-        _gameboardArray.forEach((e, index) => e.forEach((value, jndex) => transpose[jndex][index] = value));
+        _gameboardArray.forEach((e, index) => e.forEach((value, jndex) => transpose[jndex][index] = value)); // transpose the gameboard array to check columns easily
         _gameboardArray.forEach((e, index) => {
             if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === 3){rowCheck = true; winIndex = index;} 
             else if (e.reduce((previousValue, currentValue) => previousValue + currentValue) === -3){rowCheck = true; winIndex = index;}
@@ -44,8 +45,9 @@ const GameBoard = (() => {
             else if (e === -3) {diagCheck = true; winIndex = i;}
         });
         (rowCheck||columnCheck||diagCheck) ? winCheck=true : winCheck=false;
+        (_gameboardArray.flat().includes(0)) ? drawCheck=false : drawCheck=true;
         
-        return [winCheck, rowCheck, columnCheck, diagCheck, winIndex];
+        return [winCheck, drawCheck, rowCheck, columnCheck, diagCheck, winIndex];
     };
         
     const gameState = () => {
@@ -243,6 +245,7 @@ const GameEngine = (() => {
             DOM.displayGameState()
             currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
             if (GameBoard.checkBoard()[0]) endGame();
+            if (GameBoard.checkBoard()[1]) drawGame();
         }
     }
 
@@ -251,6 +254,14 @@ const GameEngine = (() => {
         gameEnded = true;
         currentPlayer === playerOne ? playerOne.incrementWins() : playerTwo.incrementWins();
         DOM.displayWinner(currentPlayer);
+        GameBoard.clearBoard();
+        DOM.displayGameState();
+    }
+
+    const drawGame = function () {
+        gameStarted = false;
+        gameEnded = true;
+        DOM.addText("It's a draw! Click here to play again!");
         GameBoard.clearBoard();
         DOM.displayGameState();
     }
