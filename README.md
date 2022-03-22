@@ -9,9 +9,9 @@ To Do on main:
 
 To Do on AI branch:
 * implement computer algorithm
-    * find/develop algorithm (p2)
-        * mini-max algorithm to recursively analyse all moves is popular
-    * pseudocode algorithm
+    * ~~find/develop algorithm (p2)~~
+        * ~mini-max algorithm to recursively analyse all moves is popular~
+    * ~pseudocode algorithm~
     * add AI option to player objects
     * code up AI algorithm into function in GameEngine
     * add UI element choice for AI in p2
