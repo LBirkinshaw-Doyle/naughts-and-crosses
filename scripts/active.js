@@ -278,11 +278,37 @@ const GameEngine = (() => {
 const Computer = (() => {
     function determineMove(token) {
         let currentBoard = GameBoard.gameState;
-
+        let move, moveScore = maximise(currentBoard, token)
         return move;
     }
 
     function score(board, move, token) {
+        let board = board;
+        let row = move[0];
+        let column = move[1];
+        let moveScore;
+        let threeInARow = 3 * token;
+
+        board[row][column] = token;
+        if (!board.flat().includes(0)) {moveScore = 0;} //if the board is full score as draw
+
+        let winSum = [
+            board[0][0] + board[0][1] + board[0][2], //row0
+            board[1][0] + board[1][1] + board[1][2], //row1
+            board[2][0] + board[2][1] + board[2][2], //row2
+            board[0][0] + board[1][0] + board[2][0], //col0
+            board[1][0] + board[1][1] + board[1][2], //col1
+            board[2][0] + board[2][1] + board[2][2], //col2
+            board[0][0] + board[1][1] + board[2][2], //diag0
+            board[2][0] + board[1][1] + board[0][2] //diag1
+        ];
+        winSum.forEach(sum => {
+            if (sum === threeInARow) {moveScore = 10;}
+            else if (sum === -threeInARow) {moveScore = -10;}
+            else moveScore = null;
+        });
+        
+
 
         return moveScore
     }
