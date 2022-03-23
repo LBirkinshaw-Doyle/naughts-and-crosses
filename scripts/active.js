@@ -71,7 +71,12 @@ const Player = () => {
     const getWins = () => _wins;
     const incrementWins = () => _wins++;
 
-    return {getToken, setToken, getWins, incrementWins};
+    let _computerControl;
+    const setComputerControl = () => _computerControl = true;
+    const clearComputerControl = () => _computerControl = false;
+    const isComputerControl = () => _computerControl
+
+    return {getToken, setToken, getWins, incrementWins, setComputerControl, clearComputerControl, isComputerControl};
 }
 
 const DOM = (() => {
