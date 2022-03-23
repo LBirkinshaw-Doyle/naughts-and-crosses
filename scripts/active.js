@@ -275,5 +275,30 @@ const GameEngine = (() => {
     return {initialize}
 })();
 
+const Computer = (() => {
+    function determineMove(token) {
+        let currentBoard = GameBoard.gameState;
+
+        return move;
+    }
+
+    function score(board, move, token) {
+
+        return moveScore
+    }
+
+    function maximise(board, token) {
+
+        return (move, moveScore)
+    }
+    
+    function minimise(board, token) {
+
+        return (move, moveScore)
+    }
+
+    return {determineMove}
+})();
+
 let playerOne, playerTwo;
 GameEngine.initialize();
