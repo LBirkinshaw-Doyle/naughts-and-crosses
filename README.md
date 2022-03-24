@@ -12,9 +12,9 @@ To Do on AI branch:
     * ~~find/develop algorithm (p2)~~
         * ~mini-max algorithm to recursively analyse all moves is popular~
     * ~pseudocode algorithm~
-    * add AI option to player objects
-    * code up AI algorithm into function in GameEngine
-    * add UI element choice for AI in p2
+    * ~add AI option to player objects~
+    * ~code up AI algorithm into function in GameEngine~
+    * ~add UI element choice for AI in p2~
     * add AI to initialize
     * link UI element to AI option in p2 object
     * call AI funtion in PlayRound after p1 instead of waiting for click to call GameEngine.playRound() for p2
