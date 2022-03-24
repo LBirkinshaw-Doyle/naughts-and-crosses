@@ -51,7 +51,7 @@ const GameBoard = (() => {
     };
         
     const gameState = () => {
-        return _gameboardArray;
+        return _gameboardArray.slice();
     };
 
     return {
@@ -277,46 +277,59 @@ const GameEngine = (() => {
 const Computer = (() => {
     function determineMove(token) {
         let results, move, moveScore;
-        let currentBoard = GameBoard.gameState();
-        console.log("computer: " + currentBoard);
+        let currentBoard = [];
+        GameBoard.gameState().forEach(row => currentBoard = currentBoard.concat(row));
         results = maximise(currentBoard, token);
         move = results[0];
         moveScore = results[1];
-        console.log("results: move: " + move + " moveScore: " + moveScore)
+        
         return move;
     }
 
     function score(board, move, token) {
-        let currentBoard = board;
+        let scoreBoard = board.slice();
         let row = move[0];
         let column = move[1];
         let moveScore;
         let threeInARow = 3 * token;
 
-        currentBoard[row][column] = token;
-        if (!currentBoard.flat().includes(0)) {moveScore = 0;} //if the board is full score as draw
+        scoreBoard[row][column] = token;
+        if (!scoreBoard.flat().includes(0)) {moveScore = 0;} //if the board is full score as draw
 
         let winSum = [
-            currentBoard[0][0] + currentBoard[0][1] + currentBoard[0][2], //row0
-            currentBoard[1][0] + currentBoard[1][1] + currentBoard[1][2], //row1
-            currentBoard[2][0] + currentBoard[2][1] + currentBoard[2][2], //row2
-            currentBoard[0][0] + currentBoard[1][0] + currentBoard[2][0], //col0
-            currentBoard[1][0] + currentBoard[1][1] + currentBoard[1][2], //col1
-            currentBoard[2][0] + currentBoard[2][1] + currentBoard[2][2], //col2
-            currentBoard[0][0] + currentBoard[1][1] + currentBoard[2][2], //diag0
-            currentBoard[2][0] + currentBoard[1][1] + currentBoard[0][2] //diag1
+            scoreBoard[0][0] + scoreBoard[0][1] + scoreBoard[0][2], //row0
+            scoreBoard[1][0] + scoreBoard[1][1] + scoreBoard[1][2], //row1
+            scoreBoard[2][0] + scoreBoard[2][1] + scoreBoard[2][2], //row2
+            scoreBoard[0][0] + scoreBoard[1][0] + scoreBoard[2][0], //col0
+            scoreBoard[1][0] + scoreBoard[1][1] + scoreBoard[1][2], //col1
+            scoreBoard[2][0] + scoreBoard[2][1] + scoreBoard[2][2], //col2
+            scoreBoard[0][0] + scoreBoard[1][1] + scoreBoard[2][2], //diag0
+            scoreBoard[2][0] + scoreBoard[1][1] + scoreBoard[0][2] //diag1
         ];
+        //console.log("sums: " + move + " : " + winSum)
         winSum.forEach(sum => {
-            if (sum === threeInARow) {moveScore = 10;}
-            else if (sum === -threeInARow) {moveScore = -10;}
-            else moveScore = null;
+            switch (sum) {
+                case threeInARow:
+                    moveScore = 10;
+                    //console.log("win");
+                    break;
+                case -threeInARow:
+                    moveScore = -10;
+                    //console.log("lose")
+                    break;
+                default:
+                    moveScore = null;
+                    //console.log("default")
+                    break;
+            }
+            
         });
         
         return moveScore
     }
 
     function maximise(board, token) {
-        let currentBoard = board;
+        let currentBoard = board.slice();
         let newBoard = [[],[],[]];
         let newToken, newMove, newScore;
         let moves = [];
@@ -326,14 +339,18 @@ const Computer = (() => {
 
         currentBoard.forEach((row, index) => {row.forEach((value, jndex) => {
             if (value === 0) {
-                console.log([index, jndex]);
                 moves.push([index, jndex])
             }
         })}) //add all possible moves to moves list
+        
+        moves.forEach(move => {
+            console.log(currentBoard.flat())
+            scores.push(score(currentBoard, move, token))
+        }); //score each possible move
 
-        moves.forEach(move => scores.push(score(currentBoard, move, token))); //score each possible move
         scores.forEach( (score, index) => {
             if (score === null) {
+                newBoard = currentBoard.slice();
                 newBoard[moves[index][0]][moves[index][1]] = token;
                 token === 1 ? newToken = -1 : newToken = 1;
                 newMove, newScore = minimise(newBoard, newToken);
@@ -344,7 +361,6 @@ const Computer = (() => {
                 move = moves[index];
             }
         })
-        console.log("maxi: "+move+ " " +moveScore);
         return [move, moveScore]
     }
     
