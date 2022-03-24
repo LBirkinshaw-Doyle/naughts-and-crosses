@@ -308,12 +308,35 @@ const Computer = (() => {
             else moveScore = null;
         });
         
-
-
         return moveScore
     }
 
     function maximise(board, token) {
+        let currentBoard = board;
+        let newBoard, newToken, newMove, newScore;
+        let moves = [];
+        let scores = [];
+        let move;
+        let moveScore = -10;
+
+        currentBoard.forEach((row, index) => {row.forEach((value, jndex) => {
+            if (value === 0) {moves.push([index, jndex])}
+        })}) //add all possible moves to moves list
+
+        moves.forEach(move => scores.push(score(currentBoard, move, token))); //score each possible move
+        scores.forEach( (score, index) => {
+            if (score === null) {
+                newBoard[moves[index][0]][moves[index][1]] = token;
+                token === 1 ? newToken = -1 : newToken = 1;
+                newMove, newScore = minimise(newBoard, newToken);
+                scores[index] = newScore;
+            }
+            if (score > moveScore) {
+                moveScore = score;
+                move = moves[index];
+            }
+        })
+
 
         return (move, moveScore)
     }
