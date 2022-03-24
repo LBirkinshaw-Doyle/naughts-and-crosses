@@ -337,11 +337,35 @@ const Computer = (() => {
             }
         })
 
-
         return (move, moveScore)
     }
     
     function minimise(board, token) {
+        let currentBoard = board;
+        let newBoard, newToken, newMove, newScore;
+        let moves = [];
+        let scores = [];
+        let move;
+        let moveScore = 10;
+
+        currentBoard.forEach((row, index) => {row.forEach((value, jndex) => {
+            if (value === 0) {moves.push([index, jndex])}
+        })}) //add all possible moves to moves list
+
+        token === 1 ? newToken = -1 : newToken = 1;
+
+        moves.forEach(move => scores.push(score(currentBoard, move, newToken))); //score each possible move from Computer perspective
+        scores.forEach( (score, index) => {
+            if (score === null) {
+                newBoard[moves[index][0]][moves[index][1]] = token;
+                newMove, newScore = maximise(newBoard, newToken);
+                scores[index] = newScore;
+            } //if the move doesn't end the game, score child moves
+            if (score < moveScore) {
+                moveScore = score;
+                move = moves[index];
+            } //find the minimum score/move
+        })
 
         return (move, moveScore)
     }
