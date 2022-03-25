@@ -287,11 +287,10 @@ const Computer = (() => {
 
     function score(board, move, token) {
         let scoreBoard = board.slice();
-        let flatMove = move[0]*3 + move[1];
         let moveScore = [];
         let threeInARow = 3 * token;
 
-        scoreBoard[flatMove] = token;
+        scoreBoard[move] = token;
         if (!scoreBoard.includes(0)) {moveScore = 0;} //if the board is full score as draw
 
         let winSum = [
@@ -365,25 +364,31 @@ const Computer = (() => {
     }
     
     function minimise(board, token) {
-        let currentBoard = board;
-        let newBoard, newToken, newMove, newScore;
+        let currentBoard = board.slice();
+        let newBoard = [];
+        let newToken, newMove, newScore;
         let moves = [];
         let scores = [];
+        let results;
         let move;
         let moveScore = 10;
 
-        currentBoard.forEach((row, index) => {row.forEach((value, jndex) => {
-            if (value === 0) {moves.push([index, jndex])}
-        })}) //add all possible moves to moves list
+        currentBoard.forEach((value, index) => {
+            if (value === 0) {
+                moves.push(index);
+            }
+        }) //add all possible moves to moves list
 
         token === 1 ? newToken = -1 : newToken = 1;
 
         moves.forEach(move => scores.push(score(currentBoard, move, newToken))); //score each possible move from Computer perspective
+
         scores.forEach( (score, index) => {
             if (score === null) {
-                newBoard[moves[index][0]][moves[index][1]] = token;
-                newMove, newScore = maximise(newBoard, newToken);
-                scores[index] = newScore;
+                newBoard = currentBoard.slice()
+                newBoard[moves[index]] = token;
+                results = maximise(newBoard, newToken);
+                scores[index] = results[1];
             } //if the move doesn't end the game, score child moves
             if (score < moveScore) {
                 moveScore = score;
