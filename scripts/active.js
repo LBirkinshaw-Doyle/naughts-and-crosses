@@ -244,16 +244,17 @@ const GameEngine = (() => {
                     playerTwo.setComputerControl();
                     playerTwo.setToken(-1);
                     gameStarted = true;
-                    playComputerRound(playerOne);
+                    playComputerRound();
                 }
                 else {
                     p2Choice === 'X' ? playerTwo.setToken(1) : playerTwo.setToken(-1);
                     p2Choice === 'X' ? playerOne.setToken(-1) : playerOne.setToken(1);
                     gameStarted = true;
-                    playComputerRound(playerOne);
+                    playComputerRound();
                 }
             }
             else if (p2Choice === 'Computer') {
+                playerTwo.setComputerControl();
                 p1Choice === 'X' ? playerOne.setToken(1) : playerOne.setToken(-1);
                 p1Choice === 'X' ? playerTwo.setToken(-1) : playerTwo.setToken(1);
                 gameStarted = true;
@@ -267,13 +268,33 @@ const GameEngine = (() => {
     }
 
     const playRound = function (location) {
+        let nextPlayer;
         if (gameStarted) {
             currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
+            currentPlayer === playerOne ? nextPlayer = playerTwo : nextPlayer = playerOne;
             GameBoard.makeMove(currentPlayer, location);
             DOM.displayGameState()
             currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
             if (GameBoard.checkBoard()[0]) endGame();
-            if (GameBoard.checkBoard()[1]) drawGame();
+            else if (GameBoard.checkBoard()[1]) drawGame();
+            else if (nextPlayer.isComputerControl()) playComputerRound();
+        }
+    }
+
+    const playComputerRound = function () {
+        let nextPlayer;
+        let move;
+        if (gameStarted) {
+            currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
+            currentPlayer === playerOne ? nextPlayer = playerTwo : nextPlayer = playerOne;
+            move = Computer.determineMove(currentPlayer.getToken());
+            console.log(move);
+            GameBoard.makeMove(currentPlayer, move);
+            DOM.displayGameState()
+            currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
+            if (GameBoard.checkBoard()[0]) endGame();
+            else if (GameBoard.checkBoard()[1]) drawGame();
+            else if (nextPlayer.isComputerControl()) playComputerRound();
         }
     }
 
@@ -300,10 +321,13 @@ const GameEngine = (() => {
 
 const Computer = (() => {
     function determineMove(token) {
-        let results, move, moveScore;
+        let results;
+        let move = [];
+        let moveScore;
         let currentBoard = GameBoard.gameState().flat();
         results = maximise(currentBoard, token);
-        move = results[0];
+        move[0] = Math.floor(results[0] / 3);
+        move[1] = results[0] % 3;
         moveScore = results[1];
         
         return move;
@@ -315,7 +339,6 @@ const Computer = (() => {
         let threeInARow = 3 * token;
 
         scoreBoard[move] = token;
-        if (!scoreBoard.includes(0)) {moveScore = 0;} //if the board is full score as draw
 
         let winSum = [
             scoreBoard[0] + scoreBoard[1] + scoreBoard[2], //row0
@@ -346,9 +369,10 @@ const Computer = (() => {
             
         });
 
-        if (moveScore.includes(10)) {return 10}
-        else if (moveScore.includes(-10)) {return -10}
-        else {return null}
+        if (moveScore.includes(10)) return 10;
+        else if (moveScore.includes(-10)) return -10;
+        else if (!scoreBoard.includes(0)) return 0;
+        else return null;
     }
 
     function maximise(board, token) {

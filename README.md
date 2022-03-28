@@ -15,10 +15,11 @@ To Do on AI branch:
     * ~add AI option to player objects~
     * ~code up AI algorithm into function in GameEngine~
     * ~add UI element choice for AI in p2~
-    * add AI to initialize
-    * link UI element to AI option in p2 object
-    * call AI funtion in PlayRound after p1 instead of waiting for click to call GameEngine.playRound() for p2
+    * ~add AI to initialize~
+    * ~link UI element to AI option in p2 object~
+    * ~call AI funtion in PlayRound after p1 instead of waiting for click to call GameEngine.playRound() for p2~
     * debug and implement + test AI
+        * bug: Computer.determineMove() is returning just next in line
 * Add some transition animation/time so the player can have time to see the AI work. 
 
 
