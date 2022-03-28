@@ -71,7 +71,7 @@ const Player = () => {
     const getWins = () => _wins;
     const incrementWins = () => _wins++;
 
-    let _computerControl;
+    let _computerControl = false;
     const setComputerControl = () => _computerControl = true;
     const clearComputerControl = () => _computerControl = false;
     const isComputerControl = () => _computerControl
@@ -160,14 +160,14 @@ const GameEngine = (() => {
     let p1Choice, p2Choice, currentPlayer, gameStarted, gameEnded;
     DOM.elements.p1Selection.addEventListener('click', e => {
         p1Choice = e.target.textContent;
-        GameBoard.clearBoard;
-        DOM.displayGameState;
+        GameBoard.clearBoard();
+        DOM.displayGameState();
         initialize();
     });
     DOM.elements.p2Selection.addEventListener('click', e => {
         p2Choice= e.target.textContent;
-        GameBoard.clearBoard;
-        DOM.displayGameState;
+        GameBoard.clearBoard();
+        DOM.displayGameState();
         initialize();
     });
     DOM.elements.topLeftSquare.addEventListener('click', () => {
@@ -206,28 +206,30 @@ const GameEngine = (() => {
     })
 
     const initialize = function () {
-        if (!(p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
+        if (!(p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && !(p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
+            DOM.elements.gameBoard.classList.remove('highlight');
+            DOM.elements.gameBoard.classList.add('inactive');
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.p1Container.classList.remove("inactive");
             DOM.elements.p1Container.classList.add("highlight");
             DOM.addText('Choose Player One');
             gameStarted = false;
         }
-        if (!(p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+        if (!(p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && (p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.p1Container.classList.remove("inactive");
             DOM.elements.p1Container.classList.add("highlight");
             DOM.addText('Choose Player One');
             gameStarted = false;
         }
-        if ((p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
+        if ((p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && !(p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
             DOM.elements.p1Container.classList.remove("highlight");
             DOM.elements.p2Container.classList.remove("inactive");
             DOM.elements.p2Container.classList.add("highlight");
             DOM.addText('Choose Player Two');
             gameStarted = false;
         }
-        if ((p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+        if ((p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && (p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
             DOM.elements.p1Container.classList.remove('highlight');
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.gameBoard.classList.remove('inactive');
