@@ -237,9 +237,31 @@ const GameEngine = (() => {
             DOM.addText('Player 1 to go!');
             playerOne = Player();
             playerTwo = Player();
-            (p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
-            (p2Choice === 'X') ? playerTwo.setToken(1) : playerTwo.setToken(-1);
-            gameStarted = true;
+            if (p1Choice === 'Computer') {
+                playerOne.setComputerControl();
+                if (p2Choice === 'Computer') {
+                    playerOne.setToken(1);
+                    playerTwo.setComputerControl();
+                    playerTwo.setToken(-1);
+                    gameStarted = true;
+                    playComputerRound(playerOne);
+                }
+                else {
+                    p2Choice === 'X' ? playerTwo.setToken(1) : playerTwo.setToken(-1);
+                    p2Choice === 'X' ? playerOne.setToken(-1) : playerOne.setToken(1);
+                    gameStarted = true;
+                    playComputerRound(playerOne);
+                }
+            }
+            else if (p2Choice === 'Computer') {
+                p1Choice === 'X' ? playerOne.setToken(1) : playerOne.setToken(-1);
+                p1Choice === 'X' ? playerTwo.setToken(-1) : playerTwo.setToken(1);
+                gameStarted = true;
+            }
+            else {(p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
+                (p2Choice === 'X') ? playerTwo.setToken(1) : playerTwo.setToken(-1);
+                gameStarted = true;
+            }
 
         }
     }
