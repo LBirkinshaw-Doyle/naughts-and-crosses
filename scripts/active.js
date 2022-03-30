@@ -333,10 +333,12 @@ const Computer = (() => {
         return move;
     }
 
-    function score(board, move, token) {
+    function score(board, move, token, maximiseScore = true) {
         let scoreBoard = board.slice();
         let moveScore = [];
-        let threeInARow = 3 * token;
+        let threeInARow;
+
+        maximiseScore ? threeInARow = 3 * token : threeInARow = -3 * token;
 
         scoreBoard[move] = token;
 
@@ -429,7 +431,7 @@ const Computer = (() => {
 
         token === 1 ? newToken = -1 : newToken = 1;
 
-        moves.forEach(move => scores.push(score(currentBoard, move, newToken))); //score each possible move from Computer perspective
+        moves.forEach(move => scores.push(score(currentBoard, move, newToken, false))); //score each possible move from Computer perspective
 
         scores.forEach( (score, index) => {
             if (score === null) {
