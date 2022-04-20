@@ -18,8 +18,9 @@ To Do on AI branch:
     * ~add AI to initialize~
     * ~link UI element to AI option in p2 object~
     * ~call AI funtion in PlayRound after p1 instead of waiting for click to call GameEngine.playRound() for p2~
-    * debug and implement + test AI
-        * bug: Computer.determineMove() is returning just next in line
+    * ~debug and implement + test AI~
+        * ~bug: wrong token being passed into score from minimise~
+        * ~bug: reporting move/moveSCore algo~
 * Add some transition animation/time so the player can have time to see the AI work. 
 
 

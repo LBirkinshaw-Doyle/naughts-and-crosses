@@ -288,7 +288,6 @@ const GameEngine = (() => {
             currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
             currentPlayer === playerOne ? nextPlayer = playerTwo : nextPlayer = playerOne;
             move = Computer.determineMove(currentPlayer.getToken());
-            console.log(move);
             GameBoard.makeMove(currentPlayer, move);
             DOM.displayGameState()
             currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
@@ -321,133 +320,111 @@ const GameEngine = (() => {
 
 const Computer = (() => {
     function determineMove(token) {
-        let results;
-        let move = [];
-        let moveScore;
+        let player;
+        let opponent;
+        let choice =[];
         let currentBoard = GameBoard.gameState().flat();
-        results = maximise(currentBoard, token);
-        move[0] = Math.floor(results[0] / 3);
-        move[1] = results[0] % 3;
-        moveScore = results[1];
-        
-        return move;
-    }
 
-    function score(board, move, token, maximiseScore = true) {
-        let scoreBoard = board.slice();
-        let moveScore = [];
-        let threeInARow;
-
-        maximiseScore ? threeInARow = 3 * token : threeInARow = -3 * token;
-
-        scoreBoard[move] = token;
-
-        let winSum = [
-            scoreBoard[0] + scoreBoard[1] + scoreBoard[2], //row0
-            scoreBoard[3] + scoreBoard[4] + scoreBoard[5], //row1
-            scoreBoard[6] + scoreBoard[7] + scoreBoard[8], //row2
-            scoreBoard[0] + scoreBoard[3] + scoreBoard[6], //col0
-            scoreBoard[1] + scoreBoard[4] + scoreBoard[7], //col1
-            scoreBoard[2] + scoreBoard[5] + scoreBoard[8], //col2
-            scoreBoard[0] + scoreBoard[4] + scoreBoard[8], //diag0
-            scoreBoard[2] + scoreBoard[4] + scoreBoard[6] //diag1
-        ];
-        //console.log("sums: " + move + " : " + winSum)
-        winSum.forEach((sum, index) => {
-            switch (sum) {
-                case threeInARow:
-                    moveScore[index] = 10;
-                    //console.log("win");
-                    break;
-                case -threeInARow:
-                    moveScore[index] = -10;
-                    //console.log("lose")
-                    break;
-                default:
-                    moveScore[index] = null;
-                    //console.log("default")
-                    break;
-            }
-            
-        });
-
-        if (moveScore.includes(10)) return 10;
-        else if (moveScore.includes(-10)) return -10;
-        else if (!scoreBoard.includes(0)) return 0;
-        else return null;
-    }
-
-    function maximise(board, token) {
-        let currentBoard = board.slice();
-        let newBoard = [];
-        let newToken, newMove, newScore;
-        let moves = [];
-        let scores = [];
-        let results;
-        let move;
-        let moveScore = -10;
+        if (token === 1) {
+            player = "X"
+            opponent = "O"
+        }
+        else {
+            opponent = "X"
+            player = "O"
+        }
 
         currentBoard.forEach((value, index) => {
-            if (value === 0) {
-                moves.push(index);
-            }
-        }) //add all possible moves to moves list
-        
-        moves.forEach(move => {
-            scores.push(score(currentBoard, move, token))
-        }); //score each possible move
-
-        scores.forEach( (score, index) => {
-            if (score === null) {
-                newBoard = currentBoard.slice();
-                newBoard[moves[index]] = token;
-                token === 1 ? newToken = -1 : newToken = 1;
-                results = minimise(newBoard, newToken);
-                scores[index] = results[1];
-            }
-            if (score > moveScore) {
-                moveScore = score;
-                move = moves[index];
-            }
+            value === 1 ? board[index] = "X": 
+            value === -1 ? board[index] = "O" : board[index] = "";
         })
-        return [move, moveScore]
+
+        minimax(board, 0, player, opponent);
+
+        choice[0] = Math.floor(move / 3);
+        choice[1] = move % 3;
+        
+        return choice;
     }
+
+    let move;
+
+    const board = {0: "", 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: ""}
+
+    const gameOver = function (board) {
+        return !Object.values(board).includes("")
+    }
+
+    const win = function (board, token) {
+
+        let row1 = board[0] === token && board[1] === token && board[2] === token;
+        let row2 = board[3] === token && board[4] === token && board[5] === token;
+        let row3 = board[6] === token && board[7] === token && board[8] === token;
+        let col1 = board[0] === token && board[3] === token && board[6] === token;
+        let col2 = board[1] === token && board[4] === token && board[7] === token;
+        let col3 = board[2] === token && board[5] === token && board[8] === token;
+        let dia1 = board[0] === token && board[4] === token && board[8] === token;
+        let dia2 = board[2] === token && board[4] === token && board[6] === token;
+
     
-    function minimise(board, token) {
-        let currentBoard = board.slice();
-        let newBoard = [];
-        let newToken, newMove, newScore;
-        let moves = [];
+
+        return row1 || row2 || row3 || col1 || col2 || col3 || dia1 || dia2
+    }
+
+    const getMoves = function (board) {
+        let moves = []
+        for (property in board) {
+            if (board[property] === "") {moves.push(property);}
+        }
+        return moves;
+    }
+
+    function score (board, player, opponent, depth) {
+        if (win(board, player)) return 10-depth; 
+        else if (win(board, opponent)) return depth-10;
+        else return 0;
+    }
+
+    function newBoard (board, move, token) {
+        let newState = Object.assign({}, board);
+        newState[move] = token;
+        return newState;
+    }
+
+    function minimax (board, depth, player, opponent, currentToken="") {
+        if (depth === 1) console.log("input: ", board);
+        let currentBoard = {}
+        Object.assign(currentBoard, board); //wtaf
+        let nextBoard;
         let scores = [];
-        let results;
-        let move;
-        let moveScore = 10;
+        let moves = [];
 
-        currentBoard.forEach((value, index) => {
-            if (value === 0) {
-                moves.push(index);
-            }
-        }) //add all possible moves to moves list
+        if (gameOver(currentBoard)||win(currentBoard, player)||win(currentBoard, opponent)) {
+            return score(currentBoard, player, opponent, depth)
+        }
 
-        token === 1 ? newToken = -1 : newToken = 1;
+        depth += 1;
+        currentToken === player ? currentToken = opponent : currentToken = player;
 
-        moves.forEach(move => scores.push(score(currentBoard, move, newToken, false))); //score each possible move from Computer perspective
-
-        scores.forEach( (score, index) => {
-            if (score === null) {
-                newBoard = currentBoard.slice()
-                newBoard[moves[index]] = token;
-                results = maximise(newBoard, newToken);
-                scores[index] = results[1];
-            } //if the move doesn't end the game, score child moves
-            if (score < moveScore) {
-                moveScore = score;
-                move = moves[index];
-            } //find the minimum score/move
+        getMoves(currentBoard).forEach((move) => {
+            nextBoard = newBoard(currentBoard, move, currentToken); 
+            scores.push(minimax(nextBoard, depth, player, opponent, currentToken)); 
+            moves.push(move);
         })
 
-        return [move, moveScore]
+        if (currentToken === player) {
+            let maxIndex = scores.indexOf(Math.max(...scores)); //PROBLEM HERE
+            move = moves[maxIndex];
+            return scores[maxIndex];
+        }
+        else {
+            let minIndex = scores.indexOf(Math.min(...scores));
+            move = moves[minIndex];
+            return scores[minIndex];
+        }
     }
+
+
 
     return {determineMove}
 })();
