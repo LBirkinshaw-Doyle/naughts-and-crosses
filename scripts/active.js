@@ -51,7 +51,7 @@ const GameBoard = (() => {
     };
         
     const gameState = () => {
-        return _gameboardArray;
+        return _gameboardArray.slice();
     };
 
     return {
@@ -71,7 +71,12 @@ const Player = () => {
     const getWins = () => _wins;
     const incrementWins = () => _wins++;
 
-    return {getToken, setToken, getWins, incrementWins};
+    let _computerControl = false;
+    const setComputerControl = () => _computerControl = true;
+    const clearComputerControl = () => _computerControl = false;
+    const isComputerControl = () => _computerControl
+
+    return {getToken, setToken, getWins, incrementWins, setComputerControl, clearComputerControl, isComputerControl};
 }
 
 const DOM = (() => {
@@ -88,7 +93,6 @@ const DOM = (() => {
     }
     const displayGameState = function() {
         let boardState = GameBoard.gameState().flat();
-        console.log(boardState);
         if (boardState[0] === 1) {elements.topLeftSquare.firstChild.textContent = "X"} 
         else if (boardState[0] === -1){elements.topLeftSquare.firstChild.textContent = "O"}
         else {elements.topLeftSquare.firstChild.textContent = ""}
@@ -156,14 +160,14 @@ const GameEngine = (() => {
     let p1Choice, p2Choice, currentPlayer, gameStarted, gameEnded;
     DOM.elements.p1Selection.addEventListener('click', e => {
         p1Choice = e.target.textContent;
-        GameBoard.clearBoard;
-        DOM.displayGameState;
+        GameBoard.clearBoard();
+        DOM.displayGameState();
         initialize();
     });
     DOM.elements.p2Selection.addEventListener('click', e => {
         p2Choice= e.target.textContent;
-        GameBoard.clearBoard;
-        DOM.displayGameState;
+        GameBoard.clearBoard();
+        DOM.displayGameState();
         initialize();
     });
     DOM.elements.topLeftSquare.addEventListener('click', () => {
@@ -202,28 +206,30 @@ const GameEngine = (() => {
     })
 
     const initialize = function () {
-        if (!(p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
+        if (!(p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && !(p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
+            DOM.elements.gameBoard.classList.remove('highlight');
+            DOM.elements.gameBoard.classList.add('inactive');
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.p1Container.classList.remove("inactive");
             DOM.elements.p1Container.classList.add("highlight");
             DOM.addText('Choose Player One');
             gameStarted = false;
         }
-        if (!(p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+        if (!(p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && (p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.p1Container.classList.remove("inactive");
             DOM.elements.p1Container.classList.add("highlight");
             DOM.addText('Choose Player One');
             gameStarted = false;
         }
-        if ((p1Choice === 'X' || p1Choice === 'O') && !(p2Choice === 'X' || p2Choice === 'O')) {
+        if ((p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && !(p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
             DOM.elements.p1Container.classList.remove("highlight");
             DOM.elements.p2Container.classList.remove("inactive");
             DOM.elements.p2Container.classList.add("highlight");
             DOM.addText('Choose Player Two');
             gameStarted = false;
         }
-        if ((p1Choice === 'X' || p1Choice === 'O') && (p2Choice === 'X' || p2Choice === 'O')) {
+        if ((p1Choice === 'X' || p1Choice === 'O' || p1Choice === 'Computer') && (p2Choice === 'X' || p2Choice === 'O' || p2Choice === 'Computer')) {
             DOM.elements.p1Container.classList.remove('highlight');
             DOM.elements.p2Container.classList.remove("highlight");
             DOM.elements.gameBoard.classList.remove('inactive');
@@ -231,21 +237,63 @@ const GameEngine = (() => {
             DOM.addText('Player 1 to go!');
             playerOne = Player();
             playerTwo = Player();
-            (p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
-            (p2Choice === 'X') ? playerTwo.setToken(1) : playerTwo.setToken(-1);
-            gameStarted = true;
+            if (p1Choice === 'Computer') {
+                playerOne.setComputerControl();
+                if (p2Choice === 'Computer') {
+                    playerOne.setToken(1);
+                    playerTwo.setComputerControl();
+                    playerTwo.setToken(-1);
+                    gameStarted = true;
+                    playComputerRound();
+                }
+                else {
+                    p2Choice === 'X' ? playerTwo.setToken(1) : playerTwo.setToken(-1);
+                    p2Choice === 'X' ? playerOne.setToken(-1) : playerOne.setToken(1);
+                    gameStarted = true;
+                    playComputerRound();
+                }
+            }
+            else if (p2Choice === 'Computer') {
+                playerTwo.setComputerControl();
+                p1Choice === 'X' ? playerOne.setToken(1) : playerOne.setToken(-1);
+                p1Choice === 'X' ? playerTwo.setToken(-1) : playerTwo.setToken(1);
+                gameStarted = true;
+            }
+            else {(p1Choice === 'X') ? playerOne.setToken(1) : playerOne.setToken(-1);
+                (p2Choice === 'X') ? playerTwo.setToken(1) : playerTwo.setToken(-1);
+                gameStarted = true;
+            }
 
         }
     }
 
     const playRound = function (location) {
+        let nextPlayer;
         if (gameStarted) {
             currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
+            currentPlayer === playerOne ? nextPlayer = playerTwo : nextPlayer = playerOne;
             GameBoard.makeMove(currentPlayer, location);
             DOM.displayGameState()
             currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
             if (GameBoard.checkBoard()[0]) endGame();
-            if (GameBoard.checkBoard()[1]) drawGame();
+            else if (GameBoard.checkBoard()[1]) drawGame();
+            else if (nextPlayer.isComputerControl()) playComputerRound();
+        }
+    }
+
+    const playComputerRound = function () {
+        let nextPlayer;
+        let move;
+        if (gameStarted) {
+            currentPlayer === playerOne ? currentPlayer = playerTwo : currentPlayer = playerOne;
+            currentPlayer === playerOne ? nextPlayer = playerTwo : nextPlayer = playerOne;
+            move = Computer.determineMove(currentPlayer.getToken());
+            GameBoard.makeMove(currentPlayer, move);
+            DOM.displayGameState()
+            currentPlayer === playerOne ? DOM.addText('Player 2 to go!') : DOM.addText('Player 1 to go!');
+            if (GameBoard.checkBoard()[0]) endGame();
+            else if (GameBoard.checkBoard()[1]) drawGame();
+            else if (nextPlayer.isComputerControl()) playComputerRound();
         }
     }
 
@@ -268,6 +316,117 @@ const GameEngine = (() => {
 
 
     return {initialize}
+})();
+
+const Computer = (() => {
+    function determineMove(token) {
+        let player;
+        let opponent;
+        let choice =[];
+        let currentBoard = GameBoard.gameState().flat();
+
+        if (token === 1) {
+            player = "X"
+            opponent = "O"
+        }
+        else {
+            opponent = "X"
+            player = "O"
+        }
+
+        currentBoard.forEach((value, index) => {
+            value === 1 ? board[index] = "X": 
+            value === -1 ? board[index] = "O" : board[index] = "";
+        })
+
+        minimax(board, 0, player, opponent);
+
+        choice[0] = Math.floor(move / 3);
+        choice[1] = move % 3;
+        
+        return choice;
+    }
+
+    let move;
+
+    const board = {0: "", 1: "", 2: "", 3: "", 4: "", 5: "", 6: "", 7: "", 8: ""}
+
+    const gameOver = function (board) {
+        return !Object.values(board).includes("")
+    }
+
+    const win = function (board, token) {
+
+        let row1 = board[0] === token && board[1] === token && board[2] === token;
+        let row2 = board[3] === token && board[4] === token && board[5] === token;
+        let row3 = board[6] === token && board[7] === token && board[8] === token;
+        let col1 = board[0] === token && board[3] === token && board[6] === token;
+        let col2 = board[1] === token && board[4] === token && board[7] === token;
+        let col3 = board[2] === token && board[5] === token && board[8] === token;
+        let dia1 = board[0] === token && board[4] === token && board[8] === token;
+        let dia2 = board[2] === token && board[4] === token && board[6] === token;
+
+    
+
+        return row1 || row2 || row3 || col1 || col2 || col3 || dia1 || dia2
+    }
+
+    const getMoves = function (board) {
+        let moves = []
+        for (property in board) {
+            if (board[property] === "") {moves.push(property);}
+        }
+        return moves;
+    }
+
+    function score (board, player, opponent, depth) {
+        if (win(board, player)) return 10-depth; 
+        else if (win(board, opponent)) return depth-10;
+        else return 0;
+    }
+
+    function newBoard (board, move, token) {
+        let newState = Object.assign({}, board);
+        newState[move] = token;
+        return newState;
+    }
+
+    function minimax (board, depth, player, opponent, currentToken="") {
+        if (depth === 1) console.log("input: ", board);
+        let currentBoard = {}
+        Object.assign(currentBoard, board); //wtaf
+        let nextBoard;
+        let scores = [];
+        let moves = [];
+
+        if (gameOver(currentBoard)||win(currentBoard, player)||win(currentBoard, opponent)) {
+            return score(currentBoard, player, opponent, depth)
+        }
+
+        depth += 1;
+        currentToken === player ? currentToken = opponent : currentToken = player;
+
+        getMoves(currentBoard).forEach((move) => {
+            nextBoard = newBoard(currentBoard, move, currentToken); 
+            scores.push(minimax(nextBoard, depth, player, opponent, currentToken)); 
+            moves.push(move);
+        })
+
+        if (currentToken === player) {
+            let maxIndex = scores.indexOf(Math.max(...scores)); //PROBLEM HERE
+            move = moves[maxIndex];
+            return scores[maxIndex];
+        }
+        else {
+            let minIndex = scores.indexOf(Math.min(...scores));
+            move = moves[minIndex];
+            return scores[minIndex];
+        }
+    }
+
+
+
+    return {determineMove}
 })();
 
 let playerOne, playerTwo;
