@@ -8,7 +8,7 @@ To Do on main:
 * ~~call endGame if all squares are full and no winner~~
 
 To Do on AI branch:
-* implement computer algorithm
+* ~implement computer algorithm~
     * ~~find/develop algorithm (p2)~~
         * ~mini-max algorithm to recursively analyse all moves is popular~
     * ~pseudocode algorithm~
@@ -21,7 +21,6 @@ To Do on AI branch:
     * ~debug and implement + test AI~
         * ~bug: wrong token being passed into score from minimise~
         * ~bug: reporting move/moveSCore algo~
-* Add some transition animation/time so the player can have time to see the AI work. 
 
 
 
