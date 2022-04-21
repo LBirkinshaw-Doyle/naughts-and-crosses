@@ -392,7 +392,6 @@ const Computer = (() => {
     }
 
     function minimax (board, depth, player, opponent, currentToken="") {
-        if (depth === 1) console.log("input: ", board);
         let currentBoard = {}
         Object.assign(currentBoard, board); //wtaf
         let nextBoard;
