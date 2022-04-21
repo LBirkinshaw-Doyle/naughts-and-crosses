@@ -1,5 +1,5 @@
-# naughts-and-crosses
-An implementation of the classic naughts &amp; crosses game
+# noughts-and-crosses
+An implementation of the classic noughts &amp; crosses game
 
 To Do on main:
 * ~~center text in boxes~~
